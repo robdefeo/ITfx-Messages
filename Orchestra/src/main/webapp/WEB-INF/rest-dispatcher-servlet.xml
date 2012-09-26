@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <bean id="Service" class="ITfx.Messages.Orchestra.DeliveryLogic" >
+        <constructor-arg name="emailDeliveryTemplate" ref="emailDeliveryTemplate" />
+    </bean>
+    <bean id="deliveryConnectionFactory" class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+        <property name="host" value="localhost" />
+        <property name="username" value="guest" />
+        <property name="password" value="guest" />
+        <property name="virtualHost" value="/" />
+        <property name="port" value="5672" />
+    </bean>
+    <bean id="emailDeliveryTemplate" class="org.springframework.amqp.rabbit.core.RabbitTemplate">
+        <property name="connectionFactory" ref="deliveryConnectionFactory" />
+        <property name="queue" value="email_deliveries" />
+        <property name="routingKey" value="email_deliveries" />
+    </bean>
+     <context:annotation-config/>
+</beans>
